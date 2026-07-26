@@ -1,0 +1,53 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum BookingStatus {
+  CONFIRMED
+  CANCELLED
+}
+
+model Resource {
+  id          String   @id @default(uuid())
+  name        String
+  description String?
+  category    String?
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  bookings Booking[]
+
+  @@map("resources")
+}
+
+model Booking {
+  id         String        @id @default(uuid())
+  resourceId String
+  resource   Resource      @relation(fields: [resourceId], references: [id], onDelete: Cascade)
+  title      String
+  bookedBy   String
+  startTime  DateTime
+  endTime    DateTime
+  status     BookingStatus @default(CONFIRMED)
+  createdAt  DateTime      @default(now())
+  updatedAt  DateTime      @updatedAt
+
+  // Speeds up the two query patterns we run constantly:
+  // "bookings for resource X in time range Y" (overlap checks, day view).
+  @@index([resourceId, startTime])
+  @@map("bookings")
+}
+
+// NOTE: Postgres EXCLUDE constraint (the DB-level overlap guarantee) is not
+// expressible in Prisma's schema language. It is added via a raw-SQL
+// follow-up migration -- see prisma/migrations/.../migration.sql and the
+// instructions in README.md. Do not remove it when regenerating migrations.

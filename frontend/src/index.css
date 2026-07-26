@@ -1,0 +1,51 @@
+@import "tailwindcss";
+
+@theme {
+  --font-display: "Space Grotesk", "Inter", sans-serif;
+  --font-sans: "Inter", sans-serif;
+  --font-mono: "JetBrains Mono", monospace;
+
+  /* Base surfaces */
+  --color-bg: #f6f7f9;
+  --color-surface: #ffffff;
+  --color-border: #e3e6eb;
+  --color-border-strong: #cbd0d9;
+
+  /* Ink */
+  --color-ink: #14181f;
+  --color-ink-muted: #5b6472;
+  --color-ink-faint: #8b93a1;
+
+  /* Accent: booked / primary actions (deep teal-green, not the usual indigo) */
+  --color-accent: #2f6f5e;
+  --color-accent-hover: #265a4c;
+  --color-accent-soft: #e8f2ef;
+  --color-accent-ink: #1d4137;
+
+  /* Danger: delete / cancel (muted brick, not pure red) */
+  --color-danger: #b3432b;
+  --color-danger-hover: #953823;
+  --color-danger-soft: #fbeae5;
+
+  /* Free-slot / neutral chip */
+  --color-free-soft: #fafbfc;
+}
+
+body {
+  background-color: var(--color-bg);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+}
+
+/* Diagonal hatch pattern used to render free slots in the Day View --
+   deliberately quiet so booked (solid) slots read as the figure. */
+.pattern-free {
+  background-image: repeating-linear-gradient(
+    135deg,
+    var(--color-border) 0px,
+    var(--color-border) 1px,
+    transparent 1px,
+    transparent 8px
+  );
+  background-color: var(--color-free-soft);
+}
